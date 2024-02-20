@@ -42,10 +42,10 @@ public class GameController {
     }
 
     @PutMapping()
-    boolean updateGameById(@RequestBody Game game) {
-        for (Game gg : data.games) {
-            if (game.getId() == gg.getId()) {
-                data.games.set(data.games.indexOf(gg), game);
+    boolean updateGameById(@RequestBody Game updGame) {
+        for (Game game : data.games) {
+            if (updGame.getId() == game.getId()) {
+                data.games.set(data.games.indexOf(game), updGame);
                 return true;
             }
         }
