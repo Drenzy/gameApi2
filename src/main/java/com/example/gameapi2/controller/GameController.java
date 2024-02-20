@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/api/games")
 public class GameController {
     @GetMapping
-    public List<Game> getAllGames(){
+    public List<Game> getAllGames() {
         return data.games;
     }
 
@@ -22,6 +22,7 @@ public class GameController {
                 .orElse(null);
         return gamefound;
     }
+
     @DeleteMapping("/{id}")
     boolean deleteGameById(@PathVariable int id) {
         Game gamefound = data.games.stream()
@@ -34,8 +35,20 @@ public class GameController {
         }
         return false;
     }
+
     @PostMapping()
     void CreateGames(@RequestBody Game game) {
         data.games.add(game);
+    }
+
+    @PutMapping()
+    boolean updateGameById(@RequestBody Game game) {
+        for (Game gg : data.games) {
+            if (game.getId() == gg.getId()) {
+                data.games.set(data.games.indexOf(gg), game);
+                return true;
+            }
+        }
+        return false;
     }
 }
