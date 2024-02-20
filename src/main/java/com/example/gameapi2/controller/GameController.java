@@ -2,6 +2,8 @@ package com.example.gameapi2.controller;
 
 import com.example.gameapi2.model.Game;
 import com.example.gameapi2.model.data;
+import com.example.gameapi2.service.GameService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,46 +11,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/games")
 public class GameController {
+
+    @Autowired
+    GameService gameService;
+
     @GetMapping
     public List<Game> getAllGames() {
-        return data.games;
+        return gameService.getAllGames();
     }
 
     @GetMapping("/{id}")
     Game getGameById(@PathVariable int id) {
-        Game gamefound = data.games.stream()
-                .filter(game -> id == game.getId())
-                .findAny()
-                .orElse(null);
-        return gamefound;
+        return gameService.getGameById(id);
     }
 
     @DeleteMapping("/{id}")
-    boolean deleteGameById(@PathVariable int id) {
-        Game gamefound = data.games.stream()
-                .filter(game -> id == game.getId())
-                .findAny()
-                .orElse(null);
-        if (gamefound != null) {
-            data.games.remove(gamefound);
-            return true;
-        }
-        return false;
+    void deleteGameById(@PathVariable int id) {
+        gameService.deleteGameByid(id);
     }
 
     @PostMapping()
     void CreateGames(@RequestBody Game game) {
-        data.games.add(game);
+        gameService.createGame(game);
     }
 
     @PutMapping()
-    boolean updateGameById(@RequestBody Game updGame) {
-        for (Game game : data.games) {
-            if (updGame.getId() == game.getId()) {
-                data.games.set(data.games.indexOf(game), updGame);
-                return true;
-            }
-        }
-        return false;
+    void updateGameById(@RequestBody Game updGame) {
+        gameService.createGame(updGame);
     }
 }
